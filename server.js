@@ -5,12 +5,10 @@ const socketIO = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: 'wss://socketsbay.com/wss/v2/1/demo/',
-    methods: ['GET', 'POST'],
-  },
+const io = new Server(httpServer, {
+  // options
 });
+
 
 const mentors = [];
 const students = [];
