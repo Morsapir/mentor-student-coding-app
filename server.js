@@ -12,6 +12,11 @@ const students = [];
 
 app.use(express.static('public'));
 
+app.get('/code-block/:blockType', (req, res) => {
+  const blockType = req.params.blockType;
+  res.sendFile(__dirname + `/public/code-block/${blockType}.html`);
+});
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
