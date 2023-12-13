@@ -4,23 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Code Block</title>
   <link rel="stylesheet" href="styles.css">
-  <title>Code Block App</title>
 </head>
 <body>
-  <div id="lobby">
-    <h1>Select Code Block</h1>
-    <ul id="codeList"></ul>
-  </div>
-
-  <div id="codeBlock" style="display: none;">
-    <h1 id="codeTitle"></h1>
-    <pre><code id="code" class="javascript"></code></pre>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlight.js"></script>
-  <script src="app.js"></script>
+  <h1>Select Code Block</h1>
+  <ul>
+    <li><a href="/code-block/array">Array</a></li>
+    <li><a href="/code-block/matrix">Matrix</a></li>
+    <li><a href="/code-block/turn">Turn</a></li>
+  </ul>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script src="highlight.pack.js"></script>
+<script src="app.js"></script>
 </html>
