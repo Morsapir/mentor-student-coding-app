@@ -29,10 +29,11 @@ $(document).ready(() => {
     }
   });
 
- function highlightCode(code) {
+function highlightCode(code) {
   // Use the passed code to highlight
   const highlightedCode = hljs.highlight('javascript', code).value;
-  $('.code-editor').text(highlightedCode); // Use text() instead of html()
+  $('.highlighted-code').html(highlightedCode); // Use a separate class or ID
 }
+
 
 });
