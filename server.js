@@ -32,6 +32,9 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   if (mentors.length === 0) {
     createRoom(socket, 'lobby');
   } else if (students.length === 0) {
@@ -41,6 +44,8 @@ io.on('connection', (socket) => {
   } else {
     socket.emit('role', 'spectator');
   }
+ 
+});
 
  socket.on('codeChange', (code) => {
   if (role === 'mentor') {
