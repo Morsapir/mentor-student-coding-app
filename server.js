@@ -7,8 +7,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-let mentorSocket = null;
-let studentSocket = null;
+const mentors = [];
+const students = [];
 
 app.use(express.static('public'));
 
@@ -17,20 +17,20 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  if (!mentorSocket) {
-    mentorSocket = socket;
+  if (mentors.length === 0) {
+    mentors.push(socket);
     socket.emit('role', 'mentor');
-  } else if (!studentSocket) {
-    studentSocket = socket;
+  } else if (students.length === 0) {
+    students.push(socket);
     socket.emit('role', 'student');
-    mentorSocket.emit('studentConnected');
+    mentors[0].emit('studentConnected');
   } else {
     socket.emit('role', 'spectator');
   }
 
   socket.on('codeChange', (code) => {
-    if (socket === studentSocket) {
-      mentorSocket.emit('codeChange', code);
+    if (students.includes(socket)) {
+      mentors[0].emit('codeChange', code);
     }
   });
 });
