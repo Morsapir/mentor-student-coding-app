@@ -5,7 +5,12 @@ const socketIO = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: 'https://your-netlify-app-url.netlify.app',
+    methods: ['GET', 'POST'],
+  },
+});
 
 const mentors = [];
 const students = [];
