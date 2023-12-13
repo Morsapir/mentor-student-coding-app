@@ -2,58 +2,37 @@
 $(document).ready(() => {
   const socket = io();
 
-  let isMentor = false;
+  let role;
 
-  // Handle mentor connection
-  socket.on('mentor-connected', (codeBlocks) => {
-    isMentor = true;
-    displayCodeList(codeBlocks);
-  });
-
-  // Handle student connection
-  socket.on('student-connected', () => {
-    isMentor = false;
-    $('#lobby').hide();
-    $('#codeBlock').show();
-  });
-
-  // Handle code updates
-  socket.on('update-code', (newCode) => {
-    if (!isMentor) {
-      $('#code').text(newCode);
-      hljs.highlightBlock($('#code')[0]);
+  socket.on('role', (data) => {
+    role = data;
+    if (role === 'mentor') {
+      $('.code-editor').prop('readonly', true);
     }
   });
 
-  // Handle code list item click
-  $('#codeList').on('click', 'li', function() {
-    const codeIndex = $(this).index();
-    const selectedCode = codeBlocks[codeIndex];
-    displayCodeBlock(selectedCode);
+  socket.on('studentConnected', () => {
+    $('.status').text('Student connected');
   });
 
-  // Handle code changes
-  $('#code').on('input', function() {
-    if (isMentor) {
-      const newCode = $(this).text();
-      socket.emit('code-changed', newCode);
+  socket.on('codeChange', (code) => {
+    if (role === 'mentor') {
+      $('.code-editor').val(code);
+      highlightCode();
     }
   });
 
-  function displayCodeList(codeBlocks) {
-    const codeList = $('#codeList');
-    codeBlocks.forEach((codeBlock) => {
-      codeList.append(`<li>${codeBlock.title}</li>`);
-    });
-  }
-
-  function displayCodeBlock(codeBlock) {
-    $('#codeTitle').text(codeBlock.title);
-    $('#code').text(codeBlock.code);
-    hljs.highlightBlock($('#code')[0]);
-    if (isMentor) {
-      $('#lobby').hide();
-      $('#codeBlock').show();
+  $('.code-editor').on('input', function () {
+    const code = $(this).val();
+    socket.emit('codeChange', code);
+    if (role === 'student') {
+      highlightCode();
     }
+  });
+
+  function highlightCode() {
+    const code = $('.code-editor').val();
+    const highlightedCode = hljs.highlight('javascript', code).value;
+    $('.code-editor').html(highlightedCode);
   }
 });
