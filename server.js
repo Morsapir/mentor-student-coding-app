@@ -7,33 +7,35 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const PORT = process.env.PORT || 3000;
+let mentorSocket = null;
+let studentSocket = null;
 
 app.use(express.static('public'));
 
-const codeBlocks = [
-  { title: 'Array', code: 'const array = [];' },
-  { title: 'Matrix', code: 'const matrix = [[]];' },
-  { title: 'Turn', code: 'function turn() {}' },
-];
-
-let mentorConnected = false;
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
 
 io.on('connection', (socket) => {
-  // Handle mentor and student connections
-  if (!mentorConnected) {
-    socket.emit('mentor-connected', codeBlocks);
-    mentorConnected = true;
+  if (!mentorSocket) {
+    mentorSocket = socket;
+    socket.emit('role', 'mentor');
+  } else if (!studentSocket) {
+    studentSocket = socket;
+    socket.emit('role', 'student');
+    mentorSocket.emit('studentConnected');
   } else {
-    socket.emit('student-connected');
+    socket.emit('role', 'spectator');
   }
 
-  // Handle code changes
-  socket.on('code-changed', (newCode) => {
-    io.emit('update-code', newCode);
+  socket.on('codeChange', (code) => {
+    if (socket === studentSocket) {
+      mentorSocket.emit('codeChange', code);
+    }
   });
 });
 
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
