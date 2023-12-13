@@ -1,24 +1,29 @@
 /* public/styles.css */
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
+}
+
+h1 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
   padding: 0;
+  text-align: center;
 }
 
-#lobby, #codeBlock {
-  max-width: 600px;
-  margin: 20px auto;
+li {
+  display: inline-block;
+  margin: 10px;
 }
 
-#codeBlock {
-  display: none;
+.code-editor {
+  width: 100%;
+  height: 300px;
 }
 
-pre {
-  margin: 0;
-}
-
-code {
-  display: block;
-  white-space: pre;
+.status {
+  font-weight: bold;
+  color: green;
 }
