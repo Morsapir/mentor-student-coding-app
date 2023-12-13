@@ -39,10 +39,18 @@ io.on('connection', (socket) => {
     socket.emit('role', 'spectator');
   }
 
-  socket.on('codeChange', (code) => {
-    // Broadcast code changes to all clients in the same room
-    io.to(socket.roomName).emit('codeChange', code);
-  });
+ socket.on('codeChange', (code) => {
+  if (role === 'mentor') {
+    highlightCode(code);
+  }
+});
+
+$('.code-editor').on('input', function () {
+  const code = $(this).text(); // Use text() to get plain text
+  socket.emit('codeChange', code);
+  if (role === 'student') {
+    highlightCode(code);
+  }
 });
 
 const PORT = process.env.PORT || 3000;
