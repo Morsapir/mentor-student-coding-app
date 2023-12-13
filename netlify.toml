@@ -1,0 +1,6 @@
+[build]
+command = "npm run build"  # Adjust this if needed
+publish = "public"         # Adjust this if needed
+
+[dev]
+command = "npm run start"  # Adjust this if needed
