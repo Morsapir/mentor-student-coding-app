@@ -1,5 +1,5 @@
 $(document).ready(() => {
-const socket = io({ secure: true });
+const socket = io();
   let role;
 
   socket.on('role', (data) => {
@@ -8,6 +8,7 @@ const socket = io({ secure: true });
       $('.code-editor').prop('readonly', true);
     }
   });
+
 
   socket.on('studentConnected', () => {
     $('.status').text('Student connected');
