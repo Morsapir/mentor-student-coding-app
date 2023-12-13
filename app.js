@@ -1,7 +1,5 @@
-// public/app.js
 $(document).ready(() => {
   const socket = io();
-
   let role;
 
   socket.on('role', (data) => {
@@ -17,7 +15,8 @@ $(document).ready(() => {
 
   socket.on('codeChange', (code) => {
     if (role === 'mentor') {
-      $('.code-editor').val(code);
+      // Use .html() for consistent handling of HTML content
+      $('.code-editor').html(code);
       highlightCode();
     }
   });
@@ -26,12 +25,12 @@ $(document).ready(() => {
     const code = $(this).val();
     socket.emit('codeChange', code);
     if (role === 'student') {
-      highlightCode();
+      highlightCode(code); // Pass the specific code to highlight
     }
   });
 
-  function highlightCode() {
-    const code = $('.code-editor').val();
+  function highlightCode(code) {
+    // Use the passed code to highlight
     const highlightedCode = hljs.highlight('javascript', code).value;
     $('.code-editor').html(highlightedCode);
   }
