@@ -12,6 +12,13 @@ const students = [];
 
 app.use(express.static('public'));
 
+// Add this function to handle room creation
+function createRoom(socket, roomName) {
+  socket.join(roomName);
+  socket.emit('role', 'mentor');
+  mentors.push({ socket, roomName });
+}
+
 app.get('/code-block/:blockType', (req, res) => {
   const blockType = req.params.blockType;
   res.sendFile(__dirname + `/public/code-block/${blockType}.html`);
@@ -23,20 +30,18 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   if (mentors.length === 0) {
-    mentors.push(socket);
-    socket.emit('role', 'mentor');
+    createRoom(socket, 'lobby');
   } else if (students.length === 0) {
-    students.push(socket);
-    socket.emit('role', 'student');
-    mentors[0].emit('studentConnected');
+    const mentor = mentors[0];
+    createRoom(socket, mentor.roomName);
+    mentor.socket.emit('studentConnected');
   } else {
     socket.emit('role', 'spectator');
   }
 
   socket.on('codeChange', (code) => {
-    if (students.includes(socket)) {
-      mentors[0].emit('codeChange', code);
-    }
+    // Broadcast code changes to all clients in the same room
+    io.to(socket.roomName).emit('codeChange', code);
   });
 });
 
