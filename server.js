@@ -42,21 +42,20 @@ io.on('connection', (socket) => {
   } else {
     socket.emit('role', 'spectator');
   }
- 
-});
 
  socket.on('codeChange', (code) => {
-  if (role === 'mentor') {
-    highlightCode(code);
-  }
-});
+        if (role === 'mentor') {
+            highlightCode(code);
+        }
+    });
 
-$('.code-editor').on('input', function () {
-  const code = $(this).text(); // Use text() to get plain text
-  socket.emit('codeChange', code);
-  if (role === 'student') {
-    highlightCode(code);
-  }
+    $('.code-editor').on('input', function () {
+        const code = $(this).text(); // Use text() to get plain text
+        socket.emit('codeChange', code);
+        if (role === 'student') {
+            highlightCode(code);
+        }
+    });
 });
 
 server.listen(8080, () => {
