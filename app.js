@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  const socket = io();
+const socket = io({ secure: true });
   let role;
 
   socket.on('role', (data) => {
