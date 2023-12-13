@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'https://your-netlify-app-url.netlify.app',
+    origin: 'wss://socketsbay.com/wss/v2/1/demo/',
     methods: ['GET', 'POST'],
   },
 });
